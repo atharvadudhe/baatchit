@@ -89,10 +89,10 @@ End the call cleanly. The meeting is stored in your history automatically.
 ## 🔗 Links
 
 - 🌐 **Live Demo (Frontend):**  
-  _Coming Soon_
+  https://baatchit-henna.vercel.app/
 
 - ⚙️ **Live Demo (Backend / API):**  
-  _Coming Soon_
+  https://baatchit-i9vm.onrender.com
 
 - 💻 **GitHub Repository (Full Project):**  
   https://github.com/atharvadudhe/baatchit
