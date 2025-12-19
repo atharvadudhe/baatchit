@@ -61,7 +61,6 @@ const Authentication = () => {
   return (
     <>
       <Box sx={{ minHeight: "100vh", display: "flex" }}>
-        {/* LEFT – AUTH PANEL */}
         <Box
           sx={{
             width: "420px",
@@ -155,7 +154,6 @@ const Authentication = () => {
           </Box>
         </Box>
 
-        {/* RIGHT – IMAGE */}
         <Box sx={{ flex: 1, display: { xs: "none", md: "flex" } }}>
           <Box
             component="img"

@@ -66,7 +66,6 @@ export default function LandingPage() {
           </Box>
         </Section>
 
-        {/* ABOUT */}
         <Section>
           <Typography sx={sectionTitle}>What is BaatChit?</Typography>
 
@@ -88,7 +87,6 @@ export default function LandingPage() {
           </Typography>
         </Section>
 
-        {/* FEATURES */}
         <Section>
           <Typography sx={sectionTitle}>Features that feel instant</Typography>
 
@@ -99,7 +97,6 @@ export default function LandingPage() {
           </Box>
         </Section>
 
-        {/* HOW IT WORKS */}
         <Section>
           <Typography sx={sectionTitle}>How BaatChit Works</Typography>
 
@@ -116,7 +113,6 @@ export default function LandingPage() {
           </Box>
         </Section>
 
-        {/* TECH STACK */}
         <Section>
           <Typography sx={sectionTitle}>Built with modern tech</Typography>
 
@@ -127,7 +123,6 @@ export default function LandingPage() {
           ))}
         </Section>
 
-        {/* WHY */}
         <Section>
           <Typography sx={sectionTitle}>Why BaatChit?</Typography>
 
@@ -170,7 +165,7 @@ export default function LandingPage() {
           <Typography sx={heroSub}>
             Made with ❤️ by{" "}
             <a
-              href="https://github.com/your-username"
+              href="https://github.com/atharvadudhe"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#fff", textDecoration: "none" }}
