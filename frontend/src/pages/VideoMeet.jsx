@@ -151,11 +151,18 @@ export default function VideoMeetComponent() {
 
     window.localStream = stream;
     localVideoref.current.srcObject = stream;
-
     for (let id in connections) {
       if (id === socketIdRef.current) continue;
 
-      connections[id].addStream(window.localStream);
+      try {
+        window.localStream.getTracks().forEach((track) => {
+          connections[id].addTrack(track, window.localStream);
+        });
+      } catch (e) {
+        try {
+          connections[id].addStream(window.localStream);
+        } catch (err) {}
+      }
 
       connections[id].createOffer().then((description) => {
         console.log(description);
@@ -191,7 +198,15 @@ export default function VideoMeetComponent() {
           localVideoref.current.srcObject = window.localStream;
 
           for (let id in connections) {
-            connections[id].addStream(window.localStream);
+            try {
+              window.localStream.getTracks().forEach((t) => {
+                connections[id].addTrack(t, window.localStream);
+              });
+            } catch (e) {
+              try {
+                connections[id].addStream(window.localStream);
+              } catch (err) {}
+            }
 
             connections[id].createOffer().then((description) => {
               connections[id]
@@ -241,7 +256,15 @@ export default function VideoMeetComponent() {
       for (let id in connections) {
         if (id === socketIdRef.current) continue;
 
-        connections[id].addStream(combinedStream);
+        try {
+          combinedStream.getTracks().forEach((track) => {
+            connections[id].addTrack(track, combinedStream);
+          });
+        } catch (e) {
+          try {
+            connections[id].addStream(combinedStream);
+          } catch (err) {}
+        }
 
         const offer = await connections[id].createOffer();
         await connections[id].setLocalDescription(offer);
@@ -330,31 +353,29 @@ export default function VideoMeetComponent() {
             }
           };
 
-          connections[socketListId].onaddstream = (event) => {
-            console.log("BEFORE:", videoRef.current);
-            console.log("FINDING ID: ", socketListId);
+          // Use modern ontrack handler and addTrack; keep addStream fallback
+          connections[socketListId].ontrack = (event) => {
+            const remoteStream = event.streams && event.streams[0];
+            console.log("RECEIVED TRACK FOR:", socketListId, remoteStream);
 
             let videoExists = videoRef.current.find(
               (video) => video.socketId === socketListId
             );
 
             if (videoExists) {
-              console.log("FOUND EXISTING");
-
               setVideos((videos) => {
                 const updatedVideos = videos.map((video) =>
                   video.socketId === socketListId
-                    ? { ...video, stream: event.stream }
+                    ? { ...video, stream: remoteStream }
                     : video
                 );
                 videoRef.current = updatedVideos;
                 return updatedVideos;
               });
             } else {
-              console.log("CREATING NEW");
               let newVideo = {
                 socketId: socketListId,
-                stream: event.stream,
+                stream: remoteStream,
                 autoplay: true,
                 playsinline: true,
               };
@@ -366,23 +387,46 @@ export default function VideoMeetComponent() {
               });
             }
           };
+
           if (window.localStream !== undefined && window.localStream !== null) {
-            connections[socketListId].addStream(window.localStream);
+            try {
+              window.localStream.getTracks().forEach((track) => {
+                connections[socketListId].addTrack(track, window.localStream);
+              });
+            } catch (e) {
+              try {
+                connections[socketListId].addStream(window.localStream);
+              } catch (err) {}
+            }
           } else {
             let blackSilence = (...args) =>
               new MediaStream([black(...args), silence()]);
             window.localStream = blackSilence();
-            connections[socketListId].addStream(window.localStream);
+            try {
+              window.localStream.getTracks().forEach((track) => {
+                connections[socketListId].addTrack(track, window.localStream);
+              });
+            } catch (e) {
+              try {
+                connections[socketListId].addStream(window.localStream);
+              } catch (err) {}
+            }
           }
         });
 
         if (id === socketIdRef.current) {
-          for (let id2 in connections) {
+            for (let id2 in connections) {
             if (id2 === socketIdRef.current) continue;
 
             try {
-              connections[id2].addStream(window.localStream);
-            } catch (e) {}
+              window.localStream.getTracks().forEach((t) => {
+                connections[id2].addTrack(t, window.localStream);
+              });
+            } catch (e) {
+              try {
+                connections[id2].addStream(window.localStream);
+              } catch (err) {}
+            }
 
             connections[id2].createOffer().then((description) => {
               connections[id2]
@@ -500,7 +544,15 @@ export default function VideoMeetComponent() {
         for (let id in connections) {
           if (id === socketIdRef.current) continue;
 
-          connections[id].addStream(stream);
+          try {
+            stream.getTracks().forEach((track) => {
+              connections[id].addTrack(track, stream);
+            });
+          } catch (e) {
+            try {
+              connections[id].addStream(stream);
+            } catch (err) {}
+          }
 
           connections[id].createOffer().then((description) => {
             connections[id].setLocalDescription(description).then(() => {
